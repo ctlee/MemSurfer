@@ -58,7 +58,7 @@ def check_dependencies(packages):
 # ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------
 def shlib_extn():
-    if sys.platform.startswith('linux'):    return 'so'
+    if sys.platform.startswith('linux'):    return 'a'
     elif sys.platform == 'darwin':          return 'dylib'
     elif sys.platform.startswith('win'):    return 'dll'
     raise Exception('Unknown platform ({})!'.format(sys.platform))
@@ -161,10 +161,15 @@ if __name__ == '__main__' :
 
     # external libs
     LIBS_EXT = glob.glob(os.path.join(PATHS['vtk']['lib'], 'libvtk*'))
-    LIBS_EXT = [l for l in LIBS_EXT if os.path.islink(l)]
+    #LIBS_EXT = [l for l in LIBS_EXT if os.path.islink(l)]
     LIBS_EXT = [os.path.basename(l) for l in LIBS_EXT]
     LIBS_EXT = [l[3:l.rfind('.')] for l in LIBS_EXT]
     LIBS_EXT.append('CGAL')
+    LIBS_EXT.append('CGAL_Core')
+    print(LIBS_EXT)
+
+    extra_objects = ['{}/lib{}.a'.format(PATHS['vtk']['lib'], l) for l in LIBS_EXT]
+    LIBS_EXT.append('gmp')
 
     # define the extension module
     EXT_MEM = Extension('_pymemsurfer',
@@ -185,7 +190,8 @@ if __name__ == '__main__' :
                                              '-Wno-unknown-pragmas',
                                              '-Wno-misleading-indentation',
                                              '-Wno-unknown-warning-option'],
-                         extra_link_args=['-std=c++11']
+                         extra_link_args=['-std=c++11'],
+                         extra_objects=extra_objects
                         )
 
     # --------------------------------------------------------------------------

@@ -1,6 +1,7 @@
 *.DS_Store
-build*
+build/
 external/
+dist/
 *user
 
 memsurfer.egg-info/
@@ -8,6 +9,7 @@ memsurfer/pymemsurfer.py
 memsurfer/pymemsurfer_wrap.cpp
 *.pyc
 
+*.swp
 *vtp
 *off
 *.pvcc
