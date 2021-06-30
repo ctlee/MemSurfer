@@ -1,4 +1,4 @@
 [submodule "pypoisson"]
 	path = pypoisson
-	url = git@github.com:mmolero/pypoisson.git
+	url = git@github.com:ctlee/pypoisson.git
 	ignore = dirty

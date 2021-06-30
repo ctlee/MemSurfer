@@ -145,7 +145,7 @@ class Membrane(object):
         return self.pnormals
 
     # --------------------------------------------------------------------------
-    def compute_approx_surface(self, exactness_level=10, threadct): #inputting thread count here
+    def compute_approx_surface(self, exactness_level=10, threads=12): #inputting thread count here
         '''
             Compute an approximating surface using Poisson recronstruction
                 exactness_level:  controls the smoothness
@@ -158,7 +158,7 @@ class Membrane(object):
         sfaces, sverts = poisson_reconstruction(self.points.tolist(),
                                                 self.pnormals.tolist(),
                                                 depth=exactness_level,
-                                               threads=threadct) #thread count
+                                               threads=threads) #thread count
         mtimer.end(False)
         LOGGER.info('Poisson surface computed! took {} created {} faces and {} vertices.'
                     .format(mtimer, len(sfaces), len(sverts)))
@@ -288,7 +288,7 @@ class Membrane(object):
     # A static method that computes and returns a membrane object
     # --------------------------------------------------------------------------
     @staticmethod
-    def compute(positions, labels, bbox, periodic, threadct): #adding a thread count parameter (6/28/21)
+    def compute(positions, labels, bbox, periodic, threads): #adding a thread count parameter (6/28/21)
 
         knbrs = 18
 
@@ -298,7 +298,7 @@ class Membrane(object):
         # compute the membrane
         m.fit_points_to_box_xy()
         m.compute_pnormals(knbrs)
-        m.compute_approx_surface(threadct) #inputting thread count parameter
+        m.compute_approx_surface(threads=threads) #inputting thread count parameter
         m.compute_membrane_surface()
 
         # compute properties on the membrane
